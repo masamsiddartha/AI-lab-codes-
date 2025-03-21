@@ -1,0 +1,52 @@
+from collections import deque
+
+def is_valid(state):
+    """Check if the state is valid (missionaries should never be outnumbered)."""
+    m_left, c_left, boat, m_right, c_right = state
+    if (m_left >= c_left or m_left == 0) and (m_right >= c_right or m_right == 0):
+        return True
+    return False
+
+def get_successors(state):
+    """Generate possible moves from the current state."""
+    m_left, c_left, boat, m_right, c_right = state
+    moves = [(1, 0), (2, 0), (0, 1), (0, 2), (1, 1)]
+    successors = []
+
+    for m, c in moves:
+        if boat == 1:  # Boat is on the left side
+            new_state = (m_left - m, c_left - c, 0, m_right + m, c_right + c)
+        else:  # Boat is on the right side
+            new_state = (m_left + m, c_left + c, 1, m_right - m, c_right - c)
+
+        if all(x >= 0 for x in new_state) and is_valid(new_state):
+            successors.append(new_state)
+
+    return successors
+
+def bfs():
+    """Solve the problem using BFS."""
+    start = (3, 3, 1, 0, 0)  # (Missionaries Left, Cannibals Left, Boat Position, Missionaries Right, Cannibals Right)
+    goal = (0, 0, 0, 3, 3)
+    queue = deque([(start, [])])
+    visited = set()
+
+    while queue:
+        state, path = queue.popleft()
+        if state in visited:
+            continue
+        visited.add(state)
+
+        if state == goal:
+            print("Solution found!")
+            for step in path:
+                print(step)
+            return
+
+        for next_state in get_successors(state):
+            queue.append((next_state, path + [next_state]))
+
+    print("No solution found.")
+
+# Run the function
+bfs()
