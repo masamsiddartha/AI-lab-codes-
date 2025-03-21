@@ -1,0 +1,58 @@
+import heapq
+
+class Graph:
+    def __init__(self):
+        self.graph = {}
+        self.heuristic = {}
+
+    def add_edge(self, node, neighbor, cost):
+        """Adds a weighted edge to the graph."""
+        if node not in self.graph:
+            self.graph[node] = []
+        self.graph[node].append((neighbor, cost))
+
+    def set_heuristic(self, heuristic):
+        """Sets heuristic values for A* search."""
+        self.heuristic = heuristic
+
+    def a_star(self, start, goal):
+        """Performs A* search from start to goal."""
+        open_list = []
+        heapq.heappush(open_list, (0 + self.heuristic[start], 0, start, []))
+        visited = set()
+
+        while open_list:
+            _, cost, node, path = heapq.heappop(open_list)
+
+            if node in visited:
+                continue
+            visited.add(node)
+            path = path + [node]
+
+            if node == goal:
+                print("Optimal Path:", " -> ".join(path))
+                print("Total Cost:", cost)
+                return
+
+            for neighbor, weight in self.graph.get(node, []):
+                if neighbor not in visited:
+                    new_cost = cost + weight
+                    priority = new_cost + self.heuristic[neighbor]
+                    heapq.heappush(open_list, (priority, new_cost, neighbor, path))
+
+        print("No path found.")
+
+# Example Graph
+g = Graph()
+g.add_edge("A", "B", 1)
+g.add_edge("A", "C", 4)
+g.add_edge("B", "D", 2)
+g.add_edge("C", "D", 1)
+g.add_edge("D", "E", 5)
+
+# Heuristic values (straight-line distance to goal)
+heuristic = {"A": 7, "B": 6, "C": 2, "D": 1, "E": 0}
+g.set_heuristic(heuristic)
+
+# Run A* from A to E
+g.a_star("A", "E")
