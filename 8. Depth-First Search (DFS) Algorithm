@@ -1,0 +1,26 @@
+def dfs(graph, node, visited=None):
+    """Performs DFS traversal on a graph."""
+    if visited is None:
+        visited = set()
+    
+    if node not in visited:
+        print(node, end=" ")  # Process node
+        visited.add(node)
+        for neighbor in graph[node]:
+            dfs(graph, neighbor, visited)
+
+# Example graph representation (Adjacency List)
+graph = {
+    'A': {'B', 'C'},
+    'B': {'A', 'D', 'E'},
+    'C': {'A', 'F', 'G'},
+    'D': {'B'},
+    'E': {'B', 'H'},
+    'F': {'C'},
+    'G': {'C'},
+    'H': {'E'}
+}
+
+# Run DFS from node 'A'
+print("DFS Traversal:")
+dfs(graph, 'A')
