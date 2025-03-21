@@ -1,0 +1,21 @@
+from sklearn import tree
+
+# Training data: [Feature1, Feature2] (e.g., Weight & Surface Type)
+X = [[50, 1], [60, 1], [80, 0], [90, 0], [40, 1], [85, 0]]
+Y = ["Apple", "Apple", "Orange", "Orange", "Apple", "Orange"]
+
+# Create and train the decision tree model
+clf = tree.DecisionTreeClassifier()
+clf = clf.fit(X, Y)
+
+# Test the model
+test_data = [[70, 0]]  # Example: Weight=70, Surface Type=0 (Smooth=1, Rough=0)
+prediction = clf.predict(test_data)
+
+print("Predicted Fruit:", prediction[0])
+
+# Visualizing the tree
+import matplotlib.pyplot as plt
+fig = plt.figure(figsize=(6, 6))
+tree.plot_tree(clf, feature_names=["Weight", "Surface Type"], class_names=["Apple", "Orange"], filled=True)
+plt.show()
