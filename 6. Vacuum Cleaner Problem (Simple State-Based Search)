@@ -1,0 +1,32 @@
+import random
+
+class VacuumCleaner:
+    def __init__(self):
+        # Initialize the environment (0 = clean, 1 = dirty)
+        self.environment = [[random.choice([0, 1]) for _ in range(2)] for _ in range(2)]
+        self.position = (0, 0)  # Vacuum starts at (0,0)
+
+    def display_environment(self):
+        """Print the current state of the environment."""
+        for row in self.environment:
+            print(" ".join("D" if cell else "C" for cell in row))  # D = Dirty, C = Clean
+        print(f"Vacuum at {self.position}\n")
+
+    def clean(self):
+        """Move through the grid and clean dirty spots."""
+        for i in range(2):
+            for j in range(2):
+                self.position = (i, j)
+                self.display_environment()
+                if self.environment[i][j] == 1:
+                    print(f"Cleaning dirt at {self.position}")
+                    self.environment[i][j] = 0
+                else:
+                    print(f"Already clean at {self.position}")
+
+        print("\nAll areas cleaned!")
+
+# Run the vacuum cleaner simulation
+vacuum = VacuumCleaner()
+vacuum.display_environment()
+vacuum.clean()
