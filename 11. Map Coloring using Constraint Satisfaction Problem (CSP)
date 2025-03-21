@@ -1,0 +1,29 @@
+import constraint
+
+def map_coloring():
+    problem = constraint.Problem()
+
+    # Define regions
+    regions = ["WA", "NT", "SA", "Q", "NSW", "V", "T"]
+
+    # Define colors
+    colors = ["Red", "Green", "Blue"]
+
+    # Add variables (regions with available colors)
+    for region in regions:
+        problem.addVariable(region, colors)
+
+    # Define constraints (adjacent regions must not have the same color)
+    constraints = [("WA", "NT"), ("WA", "SA"), ("NT", "SA"), ("NT", "Q"),
+                   ("SA", "Q"), ("SA", "NSW"), ("SA", "V"), ("Q", "NSW"), 
+                   ("NSW", "V")]
+
+    for region1, region2 in constraints:
+        problem.addConstraint(lambda x, y: x != y, (region1, region2))
+
+    # Solve and print a valid coloring
+    solution = problem.getSolution()
+    print("Map Coloring Solution:", solution)
+
+# Run the CSP solver
+map_coloring()
