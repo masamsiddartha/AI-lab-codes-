@@ -1,0 +1,38 @@
+from collections import deque
+
+def water_jug(x, y, target):
+    visited = set()
+    queue = deque([(0, 0)])  # Initial state (0,0)
+    
+    while queue:
+        a, b = queue.popleft()
+        
+        # If this state is already visited, skip
+        if (a, b) in visited:
+            continue
+        
+        print(f"Current State: ({a}, {b})")
+        visited.add((a, b))
+        
+        # If we reach the target, return the solution
+        if a == target or b == target:
+            print(f"Solution found: ({a}, {b})")
+            return
+
+        # Possible operations
+        queue.extend([
+            (x, b),  # Fill jug1
+            (a, y),  # Fill jug2
+            (0, b),  # Empty jug1
+            (a, 0),  # Empty jug2
+            (min(a + b, x), max(0, a + b - x)),  # Pour jug2 -> jug1
+            (max(0, a + b - y), min(a + b, y))   # Pour jug1 -> jug2
+        ])
+    
+    print("No solution")
+
+# Example usage:
+jug1_capacity = 4
+jug2_capacity = 3
+target_amount = 2
+water_jug(jug1_capacity, jug2_capacity, target_amount)
